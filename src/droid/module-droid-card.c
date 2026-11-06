@@ -422,7 +422,7 @@ static void park_profile(pa_droid_profile *dp) {
 
     /* Virtual profiles don't have input mappings. */
     if ((am = dp->input_mapping)) {
-        if (pa_droid_mapping_is_primary(am))
+        if (pa_droid_mapping_is_primary(am) && am->source)
             pa_source_set_port(am->source, PA_DROID_INPUT_PARKING, false);
     };
 }

@@ -55,7 +55,10 @@ CONVERT_FUNC(format);
 CONVERT_FUNC(output_channel);
 CONVERT_FUNC(input_channel);
 
-#define value_separator(legacy) (legacy ? "|" : ",")
+/* pa_split() takes a set of delimiter characters, not a delimiter string,
+ * so listing them all here is enough. The XML configuration separates
+ * list values with spaces; the legacy .conf format uses "|". */
+#define value_separator(legacy) (legacy ? "|" : " ,")
 
 static bool string_convert_num_to_str(const struct string_conversion *list, const uint32_t value, const char **to_str) {
     pa_assert(list);
@@ -266,6 +269,12 @@ static int parse_list(const struct string_conversion *table,
     while ((entry = pa_split(str, separator, &state))) {
         uint32_t d = 0;
 
+        /* consecutive separators produce empty entries */
+        if (!*entry) {
+            pa_xfree(entry);
+            continue;
+        }
+
         if (!string_convert_str_to_num(table, entry, &d)) {
             if (*unknown_entries) {
                 unknown = pa_sprintf_malloc("%s|%s", *unknown_entries, entry);
@@ -332,6 +341,12 @@ bool pa_conversion_parse_sampling_rates(const char *fn, const unsigned ln,
     uint32_t pos = 0;
     while ((entry = pa_split(str, value_separator(legacy), &state))) {
         int32_t val;
+
+        /* consecutive separators produce empty entries */
+        if (!*entry) {
+            pa_xfree(entry);
+            continue;
+        }
 
 #if AUDIO_API_VERSION_MAJ >= 3
         if (pos == 0 && pa_streq(entry, "dynamic")) {
@@ -503,7 +518,7 @@ bool pa_conversion_parse_output_flags(const char *fn, const unsigned ln,
     pa_assert(str);
     pa_assert(flags);
 
-    count = pa_conversion_parse_list(CONV_STRING_OUTPUT_FLAG, "|", str, flags, &unknown);
+    count = pa_conversion_parse_list(CONV_STRING_OUTPUT_FLAG, "| ", str, flags, &unknown);
 
     return check_and_log(fn, ln, "flags", count, str, unknown, false);
 }
@@ -517,7 +532,7 @@ bool pa_conversion_parse_input_flags(const char *fn, const unsigned ln,
     pa_assert(str);
     pa_assert(flags);
 
-    count = pa_conversion_parse_list(CONV_STRING_INPUT_FLAG, "|", str, flags, &unknown);
+    count = pa_conversion_parse_list(CONV_STRING_INPUT_FLAG, "| ", str, flags, &unknown);
 
     return check_and_log(fn, ln, "flags", count, str, unknown, false);
 }
