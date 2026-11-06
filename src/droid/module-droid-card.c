@@ -68,7 +68,7 @@
 
 PA_MODULE_AUTHOR("Juho Hämäläinen");
 PA_MODULE_DESCRIPTION("Droid card jb2q");
-PA_MODULE_VERSION(PACKAGE_VERSION);
+PA_MODULE_VERSION(PULSEAUDIO_VERSION);
 PA_MODULE_USAGE(
         "card_name=<name for the card> "
         "sink_name=<name for the sink> "

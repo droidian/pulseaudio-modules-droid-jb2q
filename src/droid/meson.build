@@ -9,7 +9,7 @@ droid_sink = library('droid-sink',
 
 droid_sink_dep = declare_dependency(
   link_with : droid_sink,
-  compile_args : pa_c_args + ['-DPULSEAUDIO_VERSION=@0@'.format(pa_version_major)],
+  compile_args : pa_c_args + ['-DPULSEAUDIO_VERSION="@0@"'.format(pa_pulse_major_minor)],
   dependencies : libdroid_util_dep,
   include_directories : [configinc],
 )
@@ -25,7 +25,7 @@ droid_source = library('droid-source',
 
 droid_source_dep = declare_dependency(
   link_with : droid_source,
-  compile_args : pa_c_args + ['-DPULSEAUDIO_VERSION=@0@'.format(pa_version_major)],
+  compile_args : pa_c_args + ['-DPULSEAUDIO_VERSION="@0@"'.format(pa_pulse_major_minor)],
   dependencies : libdroid_util_dep,
   include_directories : [configinc],
 )

@@ -31,7 +31,7 @@ install_headers(libdroid_util_headers, subdir : 'pulsecore/modules/droid')
 
 libdroid_util = library('droid-util',
   libdroid_util_sources,
-  c_args : [pa_c_args, '-DPULSEAUDIO_VERSION=@0@'.format(pa_version_major)],
+  c_args : [pa_c_args, '-DPULSEAUDIO_VERSION="@0@"'.format(pa_pulse_major_minor)],
   dependencies : libdroid_util_deps,
   pic : true,
   include_directories : [configinc, include_directories('include')],
@@ -42,7 +42,7 @@ libdroid_util = library('droid-util',
 
 libdroid_util_dep = declare_dependency(
   link_with : libdroid_util,
-  compile_args : pa_c_args + ['-DPULSEAUDIO_VERSION=@0@'.format(pa_version_major)],
+  compile_args : pa_c_args + ['-DPULSEAUDIO_VERSION="@0@"'.format(pa_pulse_major_minor)],
   dependencies : libdroid_util_deps,
   include_directories : [configinc, include_directories('include')],
 )

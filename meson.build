@@ -24,6 +24,11 @@ hybris_dep = dependency('libhardware', version : '>= 0.1.0', required : true)
 hybris_common_dep = cc.find_library('hybris-common', required : true)
 ltdl_dep = cc.find_library('ltdl', required : true)
 pulsecore_dep = dependency('pulsecore', version : '>= 14.2', required : true)
+# PulseAudio loads a module only if the version the module declares is
+# exactly PulseAudio's own major.minor, so take that from libpulse.
+libpulse_dep = dependency('libpulse', version : '>= 14.2', required : true)
+pa_pulse_version_split = libpulse_dep.version().split('-')[0].split('.')
+pa_pulse_major_minor = pa_pulse_version_split[0] + '.' + pa_pulse_version_split[1]
 udev_dep = dependency('libudev', required : true)
 evdev_dep = dependency('libevdev', version : '>= 1.0', required : true)
 
