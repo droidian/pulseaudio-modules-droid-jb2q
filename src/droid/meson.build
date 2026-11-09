@@ -59,3 +59,18 @@ module_sink = shared_module('module-droid-card',
   install_dir : modlibexecdir,
   install_rpath : rpath_dirs,
 )
+
+# PulseAudio loads a module only if it declares PulseAudio's own version, so
+# module-droid-fm declares major.minor of the libpulse it is built against.
+fm_pulse_version = dependency('libpulse', version : '>= 14.2', required : true).version().split('-')[0].split('.')
+
+module_fm = shared_module('module-droid-fm',
+  'module-droid-fm.c',
+  name_prefix : '',
+  c_args : ['-DPA_MODULE_NAME=module_droid_fm',
+            '-DPULSEAUDIO_PACKAGE_VERSION="@0@.@1@"'.format(fm_pulse_version[0], fm_pulse_version[1])],
+  dependencies : [libdroid_util_dep],
+  install : true,
+  install_dir : modlibexecdir,
+  install_rpath : rpath_dirs,
+)
